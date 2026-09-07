@@ -22,7 +22,7 @@
   :root{
     --navy:#2A2C57; --navy-900:#191A2E; --navy-800:#1E1F33; --navy-700:#33356A; --navy-300:#8E90C4;
     --red:#CA493B; --red-600:#BE4734; --red-50:#FBEEEC;
-    --ink:#1E1F33; --muted:#5C5F7E; --faint:#8A8DA8;
+    --ink:#1E1F33; --muted:#585B79; --faint:#676A8C;
     --bg:#F6F7FC; --bg-2:#EEF0F9; --surface:#FFFFFF; --line:#E4E6F1; --line-2:#D3D6E7;
     --ok:#1F8A5B;
     --shadow-sm:0 1px 2px rgba(25,26,46,.05), 0 2px 8px rgba(25,26,46,.05);
@@ -39,6 +39,8 @@
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   body{margin:0;font-family:var(--f-sans);color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
+  a:focus-visible,button:focus-visible{outline:3px solid #8E90C4;outline-offset:3px;border-radius:6px}
+  .hero a:focus-visible,.membership a:focus-visible,.final a:focus-visible,footer a:focus-visible{outline-color:#F2A99F}
   img{max-width:100%;display:block}
   h1,h2,h3{font-family:var(--f-serif);font-weight:600;line-height:1.08;letter-spacing:-.02em;margin:0;text-wrap:balance}
   p{margin:0}
@@ -109,7 +111,7 @@
   @media(min-width:720px){.stats .grid{grid-template-columns:repeat(4,1fr)}}
 
   /* ---------- Sections ---------- */
-  section{padding:64px 0}
+  section{padding:64px 0;scroll-margin-top:78px}
   .sec-head{max-width:60ch}
   .sec-head h2{font-size:clamp(28px,5.2vw,46px);margin-top:16px;color:var(--navy)}
   .sec-head p{margin-top:16px;font-size:17px;color:var(--muted)}
@@ -201,15 +203,20 @@
   .foot-col h4{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7d80b0;margin:0 0 14px;font-weight:500}
   .foot-col a{display:block;padding:6px 0;color:#B9BBDA;transition:color .15s}
   .foot-col a:hover{color:#fff}
-  .foot-bottom{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,255,.10);display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;color:#7d80b0;font-size:12.5px}
-  .foot-bottom a{color:#9092BE}
+  .foot-bottom{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;color:#9092BE;font-size:12.5px}
+  .foot-bottom a{color:#C0C2E4}
+  .foot-col a{min-height:auto;padding:8px 0}
   .foot-bottom .sep{margin-left:auto}
   @media(min-width:760px){.foot-grid{grid-template-columns:1.6fr 1fr 1fr 1fr}}
 
   /* reveal */
   [data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
   [data-reveal].in{opacity:1;transform:none}
-  @media (prefers-reduced-motion:reduce){[data-reveal]{opacity:1!important;transform:none!important;transition:none}}
+  @media (prefers-reduced-motion:reduce){
+    [data-reveal]{opacity:1!important;transform:none!important;transition:none}
+    *,*::before,*::after{transition-duration:.001ms!important;animation-duration:.001ms!important;animation-iteration-count:1!important}
+    .btn:hover,.pcard:hover,.wg:hover{transform:none!important}
+  }
 </style>
 </head>
 <body>
@@ -230,7 +237,7 @@
     </nav>
     <a class="btn btn-primary nav-cta" href="#membresia">Hazte miembro</a>
     <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Menú móvil">
@@ -256,7 +263,7 @@
       <p class="lead">Somos el capítulo regional de AOAC INTERNATIONAL. Reunimos a laboratorios, industria, academia y reguladores en torno a <strong>métodos validados</strong> que garantizan la inocuidad de los alimentos, la salud y el ambiente.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="#membresia">Hazte miembro
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <a class="btn btn-ghost on-dark" href="#que-es">Qué es la AOAC</a>
       </div>
@@ -332,25 +339,25 @@
       </div>
       <div class="cards">
         <div class="pcard" data-reveal>
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7.5 14h9"/></svg></div>
+          <div class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7.5 14h9"/></svg></div>
           <h3>Métodos validados</h3>
           <p>Adopción y difusión de métodos OMA/PTM para análisis confiables en alimentos, ambiente y salud.</p>
           <div class="tag">// validación de métodos</div>
         </div>
         <div class="pcard" data-reveal>
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></div>
+          <div class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></div>
           <h3>Ensayos de aptitud</h3>
           <p>Programas de comparación entre laboratorios para demostrar y mejorar la competencia técnica.</p>
           <div class="tag">// proficiency testing</div>
         </div>
         <div class="pcard" data-reveal>
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></div>
+          <div class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></div>
           <h3>Formación</h3>
           <p>Cursos, diplomados y webinars técnicos; mentoría para jóvenes científicos de la región.</p>
           <div class="tag">// capacitación</div>
         </div>
         <div class="pcard" data-reveal>
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></div>
+          <div class="ic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></div>
           <h3>Armonización</h3>
           <p>Métodos comparables entre países para facilitar el comercio y la vigilancia sanitaria.</p>
           <div class="tag">// integración regional</div>
@@ -390,10 +397,10 @@
           </div>
         </div>
         <div class="benefits" data-reveal>
-          <div class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><b>Métodos y buenas prácticas</b><span>Acceso a estándares de referencia reconocidos mundialmente.</span></div></div>
-          <div class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><b>Armonización regional</b><span>Participa en la definición de métodos comparables para LATAM.</span></div></div>
-          <div class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><b>Formación y actualización</b><span>Cursos, webinars y mentoría técnica continua.</span></div></div>
-          <div class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><b>Networking y visibilidad</b><span>Conecta con laboratorios, industria y reguladores de la región.</span></div></div>
+          <div class="benefit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><b>Métodos y buenas prácticas</b><span>Acceso a estándares de referencia reconocidos mundialmente.</span></div></div>
+          <div class="benefit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><b>Armonización regional</b><span>Participa en la definición de métodos comparables para LATAM.</span></div></div>
+          <div class="benefit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><b>Formación y actualización</b><span>Cursos, webinars y mentoría técnica continua.</span></div></div>
+          <div class="benefit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><b>Networking y visibilidad</b><span>Conecta con laboratorios, industria y reguladores de la región.</span></div></div>
         </div>
       </div>
     </div>
@@ -414,7 +421,7 @@
             <h3>AOAC LATAM</h3>
             <p>Desarrolla, valida y armoniza los métodos analíticos de referencia para la región.</p>
           </div>
-          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="arrow"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
           <div class="node">
             <div class="k">La aplicación</div>
             <h3>Cetox — Centro Toxicológico</h3>
@@ -424,7 +431,7 @@
         <div class="cetox-cta">
           <p>Cetox es aliado y auspiciador de la AOAC LATAM, y un ejemplo del laboratorio que lleva estos estándares a la práctica.</p>
           <a class="btn btn-ghost" href="https://cetox.com.pe" target="_blank" rel="noopener">Visitar Cetox
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
           </a>
         </div>
       </div>
