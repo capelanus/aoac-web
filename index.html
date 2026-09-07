@@ -88,7 +88,7 @@
 
   /* ---------- Hero ---------- */
   .hero{position:relative;background:linear-gradient(180deg,#191A2E 0%,#23254A 60%,#2A2C57 100%);color:#fff;overflow:hidden;isolation:isolate}
-  .hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.55}
+  .hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.7}
   .hero::after{content:"";position:absolute;z-index:1;right:-15%;top:-25%;width:70%;height:80%;background:radial-gradient(closest-side,rgba(202,73,59,.34),transparent 72%);filter:blur(10px);pointer-events:none}
   .hero .wrap{position:relative;z-index:2;padding-top:64px;padding-bottom:76px}
   .hero h1{font-size:clamp(38px,9vw,74px);font-weight:600;letter-spacing:-.03em;margin:20px 0 0;max-width:16ch}
@@ -98,16 +98,16 @@
   .hero .trust{margin-top:34px;display:flex;align-items:center;gap:12px;font-size:13px;color:#9EA1CC;font-family:var(--f-mono);letter-spacing:.02em}
   .hero .trust .dot{width:6px;height:6px;border-radius:50%;background:#F2A99F;flex:none}
   .brandbar{position:relative;z-index:2;background:transparent}
-  .brandbar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;padding:22px 20px 46px}
+  .brandbar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;padding:22px 20px 56px}
   .brandbar span{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8285B8}
   .brandbar b{font-weight:600;color:#D7D9F0;font-size:13.5px;font-family:var(--f-sans);letter-spacing:0}
 
   /* ---------- Stats ---------- */
-  .stats{background:var(--navy);color:#fff}
-  .stats .grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.10);border-radius:var(--r-lg);overflow:hidden;margin:-30px 0 0;box-shadow:var(--shadow-lg);position:relative;z-index:5}
-  .stat{background:#31346B;padding:26px 20px;text-align:center}
-  .stat .n{font-family:var(--f-serif);font-size:clamp(30px,7vw,42px);font-weight:600;letter-spacing:-.02em;line-height:1;background:linear-gradient(90deg,#fff,#C9CBE6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  .stat .l{margin-top:10px;font-size:12.5px;color:#A9ABD6;font-family:var(--f-mono);letter-spacing:.04em}
+  .stats{background:transparent}
+  .stats .grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-radius:var(--r-lg);overflow:hidden;margin:-40px 0 0;box-shadow:var(--shadow-lg);position:relative;z-index:5}
+  .stat{background:var(--surface);padding:28px 20px;text-align:center}
+  .stat .n{font-family:var(--f-serif);font-size:clamp(30px,7vw,42px);font-weight:600;letter-spacing:-.02em;line-height:1;background:linear-gradient(135deg,var(--navy),var(--red));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .l{margin-top:10px;font-size:12.5px;color:var(--muted);font-family:var(--f-mono);letter-spacing:.04em}
   @media(min-width:720px){.stats .grid{grid-template-columns:repeat(4,1fr)}}
 
   /* ---------- Sections ---------- */
@@ -282,7 +282,7 @@
     <div class="wrap">
       <div class="grid">
         <div class="stat"><div class="n">1884</div><div class="l">Origen de AOAC</div></div>
-        <div class="stat"><div class="n">LATAM<span style="font-size:.5em;color:#A9ABD6"> + Caribe</span></div><div class="l">Alcance regional</div></div>
+        <div class="stat"><div class="n">LATAM<span style="font-size:.5em;color:var(--muted);-webkit-text-fill-color:var(--muted)"> + Caribe</span></div><div class="l">Alcance regional</div></div>
         <div class="stat"><div class="n">OMA · PTM</div><div class="l">Métodos validados</div></div>
         <div class="stat"><div class="n">ISO 17025</div><div class="l">Calidad de laboratorio</div></div>
       </div>
@@ -561,32 +561,42 @@
     document.querySelectorAll('[data-reveal]').forEach(function(el,i){ el.style.transitionDelay=Math.min(i%4*60,180)+'ms'; io.observe(el); });
   }
 
-  // hero: red molecular network
+  // hero: constelaciones + globo terráqueo con América Latina resaltada
   var canvas=document.getElementById('net');
   if(canvas && !reduce){
-    var ctx=canvas.getContext('2d'), w,h,dpr,pts,raf;
+    var ctx=canvas.getContext('2d'), w,h,dpr,pts,raf, t=0;
+    // Puntos que aproximan las Américas (lat, lon); Centro/Sudamérica = LATAM
+    var AM=[[26,-105],[23,-100],[19,-99],[15,-90],[12,-86],[9,-80],[4,-74],[-2,-79],[-8,-79],[-15,-72],[-23,-67],[-33,-70],[-41,-72],[-50,-73],[8,-62],[2,-60],[-5,-58],[-12,-50],[-20,-44],[-23,-46],[-30,-52],[-38,-60],[-34,-58]];
     function size(){
       dpr=Math.min(window.devicePixelRatio||1,2);
       var r=canvas.getBoundingClientRect(); w=r.width; h=r.height;
       canvas.width=w*dpr; canvas.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-      var n=Math.round(Math.min(64, w*h/16000));
-      pts=[]; for(var i=0;i<n;i++){ pts.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25}); }
+      var n=Math.round(Math.min(46, w*h/24000));
+      pts=[]; for(var i=0;i<n;i++){ pts.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22}); }
+    }
+    function proj(lat,lon,rot,cx,cy,R){ var la=lat*Math.PI/180, lo=(lon+rot)*Math.PI/180; return {x:cx+R*Math.cos(la)*Math.sin(lo), y:cy-R*Math.sin(la), z:Math.cos(la)*Math.cos(lo)}; }
+    function globe(){
+      var R=Math.min(h*0.5, w*0.36), cx=w*(w>760?0.72:0.5), cy=h*0.5;
+      var rot=62+Math.sin(t*0.00035)*20;
+      ctx.lineWidth=1;
+      ctx.strokeStyle='rgba(150,152,205,.13)'; ctx.beginPath(); ctx.arc(cx,cy,R,0,6.283); ctx.stroke();
+      ctx.strokeStyle='rgba(150,152,205,.10)';
+      for(var lat=-60;lat<=60;lat+=30){ ctx.beginPath(); var s=false; for(var lon=-180;lon<=180;lon+=6){ var p=proj(lat,lon,rot,cx,cy,R); if(p.z>0){ if(!s){ctx.moveTo(p.x,p.y);s=true;} else ctx.lineTo(p.x,p.y);} else s=false; } ctx.stroke(); }
+      for(var lo2=-180;lo2<180;lo2+=30){ ctx.beginPath(); var s2=false; for(var la2=-90;la2<=90;la2+=6){ var q=proj(la2,lo2,rot,cx,cy,R); if(q.z>0){ if(!s2){ctx.moveTo(q.x,q.y);s2=true;} else ctx.lineTo(q.x,q.y);} else s2=false; } ctx.stroke(); }
+      for(var i=0;i<AM.length;i++){ var a=proj(AM[i][0],AM[i][1],rot,cx,cy,R); if(a.z>0){ ctx.fillStyle='rgba(233,120,101,'+(0.3+a.z*0.55)+')'; ctx.beginPath(); ctx.arc(a.x,a.y,2.1,0,6.283); ctx.fill(); } }
+      var g=proj(-15,-62,rot,cx,cy,R);
+      if(g.z>0){ var pulse=18+Math.sin(t*0.003)*5; var grd=ctx.createRadialGradient(g.x,g.y,0,g.x,g.y,42); grd.addColorStop(0,'rgba(202,73,59,.5)'); grd.addColorStop(1,'rgba(202,73,59,0)'); ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(g.x,g.y,42,0,6.283); ctx.fill(); ctx.strokeStyle='rgba(242,169,159,.5)'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(g.x,g.y,pulse,0,6.283); ctx.stroke(); ctx.fillStyle='rgba(255,222,216,.95)'; ctx.beginPath(); ctx.arc(g.x,g.y,3,0,6.283); ctx.fill(); }
     }
     function draw(){
       ctx.clearRect(0,0,w,h);
-      for(var i=0;i<pts.length;i++){
-        var p=pts[i]; p.x+=p.vx; p.y+=p.vy;
-        if(p.x<0||p.x>w)p.vx*=-1; if(p.y<0||p.y>h)p.vy*=-1;
-        for(var j=i+1;j<pts.length;j++){
-          var q=pts[j], dx=p.x-q.x, dy=p.y-q.y, d=Math.sqrt(dx*dx+dy*dy);
-          if(d<118){ ctx.strokeStyle='rgba(160,163,214,'+(0.14*(1-d/118))+')'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
-        }
-      }
-      for(var k=0;k<pts.length;k++){ ctx.fillStyle=k%7===0?'rgba(242,169,159,.9)':'rgba(180,183,224,.55)'; ctx.beginPath(); ctx.arc(pts[k].x,pts[k].y,k%7===0?2.2:1.5,0,6.283); ctx.fill(); }
-      raf=requestAnimationFrame(draw);
+      globe();
+      for(var i=0;i<pts.length;i++){ var p=pts[i]; p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>w)p.vx*=-1; if(p.y<0||p.y>h)p.vy*=-1;
+        for(var j=i+1;j<pts.length;j++){ var q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy); if(d<118){ ctx.strokeStyle='rgba(160,163,214,'+(0.11*(1-d/118))+')'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); } } }
+      for(var k=0;k<pts.length;k++){ ctx.fillStyle=k%7===0?'rgba(242,169,159,.85)':'rgba(180,183,224,.5)'; ctx.beginPath(); ctx.arc(pts[k].x,pts[k].y,k%7===0?2:1.4,0,6.283); ctx.fill(); }
+      t+=16; raf=requestAnimationFrame(draw);
     }
     size(); draw();
-    var t; window.addEventListener('resize',function(){ clearTimeout(t); t=setTimeout(size,180); });
+    var rt; window.addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(size,180); });
     document.addEventListener('visibilitychange',function(){ if(document.hidden){cancelAnimationFrame(raf);} else {draw();} });
   }
 })();
